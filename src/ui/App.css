@@ -1,0 +1,27 @@
+.outer {
+  display: grid;
+  grid-template-rows: [nav]10% [form]90%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+menu {
+  background: hotpink;
+}
+
+form {
+  height: 100%;
+  margin: 1rem;
+
+  & button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+  }
+
+  & .inputs {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.5rem;
+  }
+}
