@@ -4,9 +4,10 @@ import { useFormGenerator } from "./useFormGenerator.tsx";
 import { Button } from "@equinor/eds-core-react";
 import { collectNodesWithRequiredProps } from "../traverser.ts";
 
-const fields = collectNodesWithRequiredProps(schema);
+const fields = await collectNodesWithRequiredProps(schema);
 function OSDUAdmin() {
   const formFields = useFormGenerator(fields);
+  console.log("%cformFields: ", "color:#f0f;", formFields);
 
   return (
     <div className="outer">

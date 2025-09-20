@@ -6,10 +6,11 @@ import {
   Switch,
   Tooltip,
 } from "@equinor/eds-core-react";
-import type { OSDUField } from "../types.ts";
+import type { OSDUField } from "../types/form";
 
 /* Accepts a list of OSDU fields and returns a list of ReactNodes ready to be rendered in a HTML form.*/
 export function useFormGenerator(fields: OSDUField[]) {
+  console.log("%cfields: ", "color:#f0f;", fields);
   const [formFields, setFormFields] = useState<ReactNode[]>([]);
 
   useEffect(() => {
@@ -29,8 +30,8 @@ export function useFormGenerator(fields: OSDUField[]) {
             >
               <Label htmlFor={id} label={field.title} />
             </Tooltip>
-            <Input type="number" id={id} />
-          </div>,
+            <Input type="number" id={id} value={field.value} />
+          </div>
         );
 
         // Field is string or date.
@@ -45,16 +46,21 @@ export function useFormGenerator(fields: OSDUField[]) {
             >
               <Label htmlFor={id} label={field.title} />
             </Tooltip>
-            {field?.format === "date-time" ? (
+            {field?.format === "date-time" && typeof field.value ? (
               <DatePicker id={id} />
             ) : (
-              <Input id={id} autoComplete="off" />
+              <Input
+                id={id}
+                autoComplete="off"
+                value={field.value}
+                onChange={() => {}}
+              />
             )}
-          </div>,
+          </div>
         );
 
         // Field is a boolean.
-      } else if (field.type === "boolean") {
+      } else if (field.type === "boolean" && typeof field.value === "boolean") {
         const id = `boolean-input-${index}`;
         nodes.push(
           <div>
@@ -63,9 +69,9 @@ export function useFormGenerator(fields: OSDUField[]) {
               enterDelay={tooltipDelay}
               title={field.description}
             >
-              <Switch id={id} label={field.title} />
+              <Switch id={id} label={field.title} checked={field.value} />
             </Tooltip>
-          </div>,
+          </div>
         );
       }
     });

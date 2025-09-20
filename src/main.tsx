@@ -6,5 +6,5 @@ import OSDUAdmin from "./ui/OSDUAdmin.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <OSDUAdmin />
-  </StrictMode>,
+  </StrictMode>
 );
