@@ -4,7 +4,7 @@ import "./index.css";
 import OSDUAdmin from "./ui/OSDUAdmin.tsx";
 import "./indexeddb/indexedDbHandler.ts";
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <OSDUAdmin />
-  </StrictMode>
+    <StrictMode>
+        <OSDUAdmin />
+    </StrictMode>
 );

@@ -5,41 +5,41 @@ import { useEffect, useState } from "react";
 const { osduAdminDb } = await import("../indexeddb/osduAdminDb.ts");
 
 type RecordPanelProps = {
-  /* The unique ID of the record. */
-  identifier: string;
+    /* The unique ID of the record. */
+    identifier: string;
 };
 
 export function RecordPanel({ identifier }: RecordPanelProps) {
-  const [kind, setKind] = useState<string | undefined>(undefined);
+    const [kind, setKind] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    osduAdminDb.resolveKindFromRecord(identifier).then(setKind);
-  }, [identifier]);
+    useEffect(() => {
+        osduAdminDb.resolveKindFromRecord(identifier).then(setKind);
+    }, [identifier]);
 
-  const formFields = useFormGenerator(kind, identifier);
+    const formFields = useFormGenerator(kind, identifier);
 
-  return (
-    <form>
-      <fieldset>{formFields.map((formField) => formField)}</fieldset>
-      <fieldset>
-        <Paper elevation="sticky" id="elevated-menu">
-          <Tooltip title="Reset form to last save state.">
-            <Button color="danger" id="reset-button">
-              Reset
-            </Button>
-          </Tooltip>
-          <Tooltip title="Undo last change">
-            <Button color="secondary" id="undo-button">
-              Undo
-            </Button>
-          </Tooltip>
-          <Tooltip title="Save changes to OSDU">
-            <Button color="primary" id="save-button" type="submit">
-              Save
-            </Button>
-          </Tooltip>
-        </Paper>
-      </fieldset>
-    </form>
-  );
+    return (
+        <form>
+            <fieldset>{formFields.map((formField) => formField)}</fieldset>
+            <fieldset>
+                <Paper elevation="sticky" id="elevated-menu">
+                    <Tooltip title="Reset form to last save state.">
+                        <Button color="danger" id="reset-button">
+                            Reset
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title="Undo last change">
+                        <Button color="secondary" id="undo-button">
+                            Undo
+                        </Button>
+                    </Tooltip>
+                    <Tooltip title="Save changes to OSDU">
+                        <Button color="primary" id="save-button" type="submit">
+                            Save
+                        </Button>
+                    </Tooltip>
+                </Paper>
+            </fieldset>
+        </form>
+    );
 }

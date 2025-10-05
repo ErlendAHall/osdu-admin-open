@@ -1,23 +1,23 @@
 export type OSDUField = {
-  identifier: string;
-  /* Describes the property */
-  description: string;
+    identifier: string;
+    /* Describes the property */
+    description: string;
 
-  /* Used as the form field label */
-  title: string;
+    /* Used as the form field label */
+    title: string;
 
-  /* Used to determine type of form field. */
-  type: string;
+    /* Used to determine type of form field. */
+    type: string;
 
-  /* Additionally describes the type*/
-  format?: string;
+    /* Additionally describes the type*/
+    format?: string;
 
-  /* Used in validation. */
-  pattern?: string;
+    /* Used in validation. */
+    pattern?: string;
 
-  /* To aid the user in how the attribute is built. */
-  example?: string;
+    /* To aid the user in how the attribute is built. */
+    example?: string;
 
-  /* The field value. */
-  value: string | number | boolean | null | undefined;
+    /* The field value. */
+    value: string | number | boolean | null | undefined;
 };

@@ -1,10 +1,10 @@
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import {
-  DatePicker,
-  Input,
-  Label,
-  Switch,
-  Tooltip,
+    DatePicker,
+    Input,
+    Label,
+    Switch,
+    Tooltip,
 } from "@equinor/eds-core-react";
 import { useRecord, useSchema } from "./useIndexedDb.ts";
 import type { OSDUField } from "../../types/form.ts";
@@ -12,94 +12,97 @@ import { collectNodesWithRequiredProps } from "../../traverser.ts";
 
 /* Accepts a kind and an identifier and creates a list of HTML form fields ready for DOM. */
 export function useFormGenerator(kind?: string, identifier?: string) {
-  const record = useRecord(identifier);
-  const schema = useSchema(kind);
-  const [osduFields, setOsduFields] = useState<OSDUField[]>([]);
-  const [htmlNodes, setHtmlNodes] = useState<ReactNode[]>([]);
+    const record = useRecord(identifier);
+    const schema = useSchema(kind);
+    const [osduFields, setOsduFields] = useState<OSDUField[]>([]);
+    const [htmlNodes, setHtmlNodes] = useState<ReactNode[]>([]);
 
-  /* When we have both schema and record, we can start mapping form fields. */
-  useMemo(() => {
-    if (!record || !schema) return;
-    collectNodesWithRequiredProps(schema).then((fields) =>
-      setOsduFields(fields)
-    );
-  }, [record, schema]);
-
-  useEffect(() => {
-    const nodes: ReactNode[] = [];
-    const tooltipDelay = 1000; //ms
-
-    osduFields.forEach((field, index) => {
-      // Field is integer or number.
-      if (field.type === "number" || field.type === "integer") {
-        const id = `number-input-${index}`;
-        nodes.push(
-          <div key={field.title + index}>
-            <Tooltip
-              placement={"left-end"}
-              enterDelay={tooltipDelay}
-              title={field.description}
-            >
-              <Label htmlFor={id} label={field.title} />
-            </Tooltip>
-            <Input
-              onChange={() => {}}
-              type="number"
-              id={id}
-              value={field.value}
-            />
-          </div>
+    /* When we have both schema and record, we can start mapping form fields. */
+    useMemo(() => {
+        if (!record || !schema) return;
+        collectNodesWithRequiredProps(schema).then((fields) =>
+            setOsduFields(fields)
         );
+    }, [record, schema]);
 
-        // Field is string or date.
-      } else if (field.type === "string") {
-        const id = `string-input-${index}`;
-        nodes.push(
-          <div key={field.title + index}>
-            <Tooltip
-              placement={"left"}
-              enterDelay={tooltipDelay}
-              title={field.description}
-            >
-              <Label htmlFor={id} label={field.title} />
-            </Tooltip>
-            {field?.format === "date-time" && typeof field.value ? (
-              <DatePicker id={id} onChange={() => {}} />
-            ) : (
-              <Input
-                id={id}
-                autoComplete="off"
-                value={field.value}
-                onChange={() => {}}
-              />
-            )}
-          </div>
-        );
+    useEffect(() => {
+        const nodes: ReactNode[] = [];
+        const tooltipDelay = 1000; //ms
 
-        // Field is a boolean.
-      } else if (field.type === "boolean" && typeof field.value === "boolean") {
-        const id = `boolean-input-${index}`;
-        nodes.push(
-          <div key={id}>
-            <Tooltip
-              placement={"left"}
-              enterDelay={tooltipDelay}
-              title={field.description}
-            >
-              <Switch
-                id={id}
-                label={field.title}
-                checked={field.value}
-                onChange={() => {}}
-              />
-            </Tooltip>
-          </div>
-        );
-      }
-    });
+        osduFields.forEach((field, index) => {
+            // Field is integer or number.
+            if (field.type === "number" || field.type === "integer") {
+                const id = `number-input-${index}`;
+                nodes.push(
+                    <div key={field.title + index}>
+                        <Tooltip
+                            placement={"left-end"}
+                            enterDelay={tooltipDelay}
+                            title={field.description}
+                        >
+                            <Label htmlFor={id} label={field.title} />
+                        </Tooltip>
+                        <Input
+                            onChange={() => {}}
+                            type="number"
+                            id={id}
+                            value={field.value}
+                        />
+                    </div>
+                );
 
-    setHtmlNodes(nodes);
-  }, [osduFields]);
+                // Field is string or date.
+            } else if (field.type === "string") {
+                const id = `string-input-${index}`;
+                nodes.push(
+                    <div key={field.title + index}>
+                        <Tooltip
+                            placement={"left"}
+                            enterDelay={tooltipDelay}
+                            title={field.description}
+                        >
+                            <Label htmlFor={id} label={field.title} />
+                        </Tooltip>
+                        {field?.format === "date-time" && typeof field.value ? (
+                            <DatePicker id={id} onChange={() => {}} />
+                        ) : (
+                            <Input
+                                id={id}
+                                autoComplete="off"
+                                value={field.value}
+                                onChange={() => {}}
+                            />
+                        )}
+                    </div>
+                );
 
-  return htmlNodes;
+                // Field is a boolean.
+            } else if (
+                field.type === "boolean" &&
+                typeof field.value === "boolean"
+            ) {
+                const id = `boolean-input-${index}`;
+                nodes.push(
+                    <div key={id}>
+                        <Tooltip
+                            placement={"left"}
+                            enterDelay={tooltipDelay}
+                            title={field.description}
+                        >
+                            <Switch
+                                id={id}
+                                label={field.title}
+                                checked={field.value}
+                                onChange={() => {}}
+                            />
+                        </Tooltip>
+                    </div>
+                );
+            }
+        });
+
+        setHtmlNodes(nodes);
+    }, [osduFields]);
+
+    return htmlNodes;
 }

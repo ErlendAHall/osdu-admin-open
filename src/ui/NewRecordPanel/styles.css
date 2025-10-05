@@ -1,5 +1,5 @@
 .record-create-fieldset {
-  display: flex;
-  flex-direction: column;
-  width: min-content;
+    display: flex;
+    flex-direction: column;
+    width: min-content;
 }

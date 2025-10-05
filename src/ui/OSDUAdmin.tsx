@@ -8,40 +8,40 @@ import { useDbEvents } from "./hooks/useDbEvents.ts";
 await import("../assets/seeder.ts");
 
 function truncateTitle(title: string) {
-  const entityName = title.split("--")[1].split(":")[0];
-  const truncatedVersion = title.split(":")?.at(-1)?.split("-")?.at(-1);
-  return entityName + ":" + truncatedVersion;
+    const entityName = title.split("--")[1].split(":")[0];
+    const truncatedVersion = title.split(":")?.at(-1)?.split("-")?.at(-1);
+    return entityName + ":" + truncatedVersion;
 }
 
 function OSDUAdmin() {
-  useDbEvents("osduadmin");
-  const identifiers = useIdentifiers();
-  const [activeTab, setActiveTab] = useState(0);
-  console.log("rerender");
+    useDbEvents("osduadmin");
+    const identifiers = useIdentifiers();
+    const [activeTab, setActiveTab] = useState(0);
+    console.log("rerender");
 
-  return (
-    <Tabs
-      activeTab={activeTab}
-      onChange={(index) => setActiveTab(Number(index))}
-    >
-      <Tabs.List>
-        <Tabs.Tab>New record +</Tabs.Tab>
-        {identifiers.map((tabTitle, index) => (
-          <Tabs.Tab key={index}>{truncateTitle(tabTitle)}</Tabs.Tab>
-        ))}
-      </Tabs.List>
-      <Tabs.Panels>
-        <Tabs.Panel>
-          <NewRecordPanel />
-        </Tabs.Panel>
-        {identifiers.map((id) => (
-          <Tabs.Panel key={id}>
-            <RecordPanel identifier={id} />
-          </Tabs.Panel>
-        ))}
-      </Tabs.Panels>
-    </Tabs>
-  );
+    return (
+        <Tabs
+            activeTab={activeTab}
+            onChange={(index) => setActiveTab(Number(index))}
+        >
+            <Tabs.List>
+                <Tabs.Tab>New record +</Tabs.Tab>
+                {identifiers.map((tabTitle, index) => (
+                    <Tabs.Tab key={index}>{truncateTitle(tabTitle)}</Tabs.Tab>
+                ))}
+            </Tabs.List>
+            <Tabs.Panels>
+                <Tabs.Panel>
+                    <NewRecordPanel />
+                </Tabs.Panel>
+                {identifiers.map((id) => (
+                    <Tabs.Panel key={id}>
+                        <RecordPanel identifier={id} />
+                    </Tabs.Panel>
+                ))}
+            </Tabs.Panels>
+        </Tabs>
+    );
 }
 
 export default OSDUAdmin;

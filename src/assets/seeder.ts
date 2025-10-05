@@ -12,16 +12,16 @@ const { osduAdminDb } = await import("../indexeddb/osduAdminDb.ts");
 globalThis.osduAdminDb = osduAdminDb;
 
 await Promise.allSettled([
-  // @ts-ignore
-  osduAdminDb.writeSchema(bhaRunSchema),
-  // @ts-ignore
-  osduAdminDb.writeSchema(holeSectionSchema),
-  // @ts-ignore
-  osduAdminDb.writeSchema(tubularAssemblySchema),
-  // @ts-ignore
-  // osduAdminDb.writeRecord(bhaRunRecord),
-  // @ts-ignore
-  osduAdminDb.writeRecord(holeSectionRecord),
-  // @ts-ignore
-  osduAdminDb.writeRecord(tubularAssemblyRecord),
+    // @ts-ignore
+    osduAdminDb.writeSchema(bhaRunSchema),
+    // @ts-ignore
+    osduAdminDb.writeSchema(holeSectionSchema),
+    // @ts-ignore
+    osduAdminDb.writeSchema(tubularAssemblySchema),
+    // @ts-ignore
+    // osduAdminDb.writeRecord(bhaRunRecord),
+    // @ts-ignore
+    osduAdminDb.writeRecord(holeSectionRecord),
+    // @ts-ignore
+    osduAdminDb.writeRecord(tubularAssemblyRecord),
 ]);
