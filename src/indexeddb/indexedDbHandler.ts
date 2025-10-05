@@ -3,7 +3,7 @@ export type IDBRecord<T> = {
   value: T;
 };
 
-enum ObjectStores {
+export enum ObjectStores {
   OSDURecordStore = "OSDURecordStore",
   OSDUSchemaStore = "OSDUSchemaStore",
 }
@@ -31,15 +31,14 @@ export class IndexedDbHandler {
         return reject("DBHandler is not initialised");
       }
 
-      console.log(this.dbHandler.objectStoreNames);
-
       const writeRequest = this.dbHandler
         .transaction(destination, "readwrite")
         .objectStore(destination)
         .put(data.value, data.identifier);
 
-      writeRequest.onsuccess = () => {
+      writeRequest.onsuccess = (event) => {
         resolve(`The record ${data.identifier} was updated.`);
+        globalThis.dispatchEvent(new CustomEvent("upsert"));
       };
 
       writeRequest.onerror = () => {
@@ -59,7 +58,8 @@ export class IndexedDbHandler {
         .objectStore(destination)
         .delete(identifier);
 
-      writeRequest.onsuccess = () => {
+      writeRequest.onsuccess = (event) => {
+        globalThis.dispatchEvent(new CustomEvent("dbdelete"));
         resolve(`The record ${identifier} was deleted.`);
       };
 
@@ -90,15 +90,53 @@ export class IndexedDbHandler {
     });
   }
 
+  async readAll<T>(destination: ObjectStores): Promise<Array<T>> {
+    return new Promise((resolve, reject) => {
+      if (!this.dbHandler) {
+        return reject("DBHandler is not initialised.");
+      }
+
+      const readRequest = this.dbHandler
+        .transaction(destination, "readonly")
+        .objectStore(destination)
+        .getAll();
+
+      readRequest.onsuccess = () => {
+        resolve(readRequest.result);
+      };
+
+      readRequest.onerror = () => {
+        reject(readRequest.error);
+      };
+    });
+  }
+
+  async readAllKeys(destination: ObjectStores): Promise<IDBValidKey[]> {
+    return new Promise((resolve, reject) => {
+      if (!this.dbHandler) {
+        return reject("DBHandler is not initialised.");
+      }
+
+      const readRequest = this.dbHandler
+        .transaction(destination, "readonly")
+        .objectStore(destination)
+        .getAllKeys();
+
+      readRequest.onsuccess = () => {
+        resolve(readRequest.result);
+      };
+
+      readRequest.onerror = () => {
+        reject(readRequest.error);
+      };
+    });
+  }
+
   async openDB(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       const openRequest = globalThis.indexedDB.open(this.IDBIdentifier, 1);
 
-      openRequest.onsuccess = (event: Event) => {
-        console.group("IndexedDB");
-        console.info(`IndexedDB ${this.IDBIdentifier} opened`);
-        console.info(event);
-        console.groupEnd();
+      openRequest.onsuccess = () => {
         resolve(openRequest.result);
       };
 

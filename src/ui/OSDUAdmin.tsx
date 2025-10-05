@@ -1,21 +1,23 @@
 import "./App.css";
-import { Button, Paper, Tooltip } from "@equinor/eds-core-react";
 import { Tabs } from "@equinor/eds-core-react";
 import { useState } from "react";
-import {NewRecordPanel} from "./NewRecordPanel.tsx";
-import {useFormGenerator} from "./hooks/useFormGenerator.tsx";
+import { useIdentifiers } from "./hooks/useIdentifiers.ts";
+import { RecordPanel } from "./RecordPanel.tsx";
+import { NewRecordPanel } from "./NewRecordPanel/NewRecordPanel.tsx";
+import { useDbEvents } from "./hooks/useDbEvents.ts";
 await import("../assets/seeder.ts");
 
-const mockId =
-  "namespace:master-data--BHARun:a828c845-101a-5ca0-a729-84fe19cf8841";
+function truncateTitle(title: string) {
+  const entityName = title.split("--")[1].split(":")[0];
+  const truncatedVersion = title.split(":")?.at(-1)?.split("-")?.at(-1);
+  return entityName + ":" + truncatedVersion;
+}
 
 function OSDUAdmin() {
-  const formFields = useFormGenerator(
-    "osdu:wks:master-data--BHARun:2.0.0",
-    mockId
-  );
-  
+  useDbEvents("osduadmin");
+  const identifiers = useIdentifiers();
   const [activeTab, setActiveTab] = useState(0);
+  console.log("rerender");
 
   return (
     <Tabs
@@ -23,39 +25,20 @@ function OSDUAdmin() {
       onChange={(index) => setActiveTab(Number(index))}
     >
       <Tabs.List>
-        <Tabs.Tab>One</Tabs.Tab>
-        <Tabs.Tab>Two</Tabs.Tab>
         <Tabs.Tab>New record +</Tabs.Tab>
+        {identifiers.map((tabTitle, index) => (
+          <Tabs.Tab key={index}>{truncateTitle(tabTitle)}</Tabs.Tab>
+        ))}
       </Tabs.List>
       <Tabs.Panels>
         <Tabs.Panel>
-          {formFields.length > 0 && (
-            <form>
-              <fieldset className="inputs">
-                {formFields.map((formField) => formField)}
-              </fieldset>
-                <Paper elevation="sticky" id="elevated-menu">
-                  <Tooltip title="Reset form to last save state.">
-                    <Button color="danger" id="reset-button">
-                      Reset
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title="Undo last change">
-                    <Button color="secondary" id="undo-button">
-                      Undo
-                    </Button>
-                  </Tooltip>
-                  <Tooltip title="Save changes to OSDU">
-                    <Button color="primary" id="save-button" type="submit">
-                      Save
-                    </Button>
-                  </Tooltip>
-                </Paper>
-            </form>
-          )}
+          <NewRecordPanel />
         </Tabs.Panel>
-        <Tabs.Panel>Panel two</Tabs.Panel>
-        <Tabs.Panel><NewRecordPanel /></Tabs.Panel>
+        {identifiers.map((id) => (
+          <Tabs.Panel key={id}>
+            <RecordPanel identifier={id} />
+          </Tabs.Panel>
+        ))}
       </Tabs.Panels>
     </Tabs>
   );

@@ -8,10 +8,10 @@ import {
 } from "@equinor/eds-core-react";
 import { useRecord, useSchema } from "./useIndexedDb.ts";
 import type { OSDUField } from "../../types/form.ts";
-import {collectNodesWithRequiredProps} from "../../traverser.ts";
+import { collectNodesWithRequiredProps } from "../../traverser.ts";
 
 /* Accepts a kind and an identifier and creates a list of HTML form fields ready for DOM. */
-export function useFormGenerator(kind: string, identifier: string) {
+export function useFormGenerator(kind?: string, identifier?: string) {
   const record = useRecord(identifier);
   const schema = useSchema(kind);
   const [osduFields, setOsduFields] = useState<OSDUField[]>([]);
@@ -42,7 +42,12 @@ export function useFormGenerator(kind: string, identifier: string) {
             >
               <Label htmlFor={id} label={field.title} />
             </Tooltip>
-            <Input type="number" id={id} value={field.value} />
+            <Input
+              onChange={() => {}}
+              type="number"
+              id={id}
+              value={field.value}
+            />
           </div>
         );
 
@@ -59,7 +64,7 @@ export function useFormGenerator(kind: string, identifier: string) {
               <Label htmlFor={id} label={field.title} />
             </Tooltip>
             {field?.format === "date-time" && typeof field.value ? (
-              <DatePicker id={id} />
+              <DatePicker id={id} onChange={() => {}} />
             ) : (
               <Input
                 id={id}
@@ -81,7 +86,12 @@ export function useFormGenerator(kind: string, identifier: string) {
               enterDelay={tooltipDelay}
               title={field.description}
             >
-              <Switch id={id} label={field.title} checked={field.value} />
+              <Switch
+                id={id}
+                label={field.title}
+                checked={field.value}
+                onChange={() => {}}
+              />
             </Tooltip>
           </div>
         );

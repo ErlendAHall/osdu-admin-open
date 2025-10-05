@@ -1,4 +1,4 @@
-import { IndexedDbHandler } from "./indexedDbHandler.ts";
+import { IndexedDbHandler, ObjectStores } from "./indexedDbHandler.ts";
 import type { OSDURecord, OSDUSchema } from "../types/osdu.ts";
 
 export interface IOsduAdminDb {
@@ -23,7 +23,26 @@ class OsduAdminDb extends IndexedDbHandler implements OsduAdminDb {
     )) as OSDUSchema;
   }
 
+  public async readAllRecords(): Promise<Array<OSDURecord>> {
+    return await this.readAll<OSDURecord>(this.objectStores.OSDURecordStore);
+  }
+
+  public async getSchemaKeyFromRecord(
+    identifier: string
+  ): Promise<string | undefined> {
+    const keys = await this.readAllKeys(ObjectStores.OSDUSchemaStore);
+
+    // TODO: This will ignore any schema versions.
+    // osdu:wks:master-data--HoleSection:1.4.0 -> HoleSection
+    identifier = identifier.split("--")[1].split(":")[0];
+
+    const match = keys.find((key) => String(key).includes(identifier));
+
+    return String(match);
+  }
+
   public async writeRecord(record: OSDURecord): Promise<boolean> {
+    debugger;
     try {
       await this.upsert<OSDURecord>(
         { identifier: record.id, value: record },
@@ -39,13 +58,23 @@ class OsduAdminDb extends IndexedDbHandler implements OsduAdminDb {
   public async writeSchema(data: OSDUSchema): Promise<boolean> {
     try {
       await this.upsert<OSDURecord>(
+        // @ts-ignore
         { identifier: data.kind ?? data["x-osdu-schema-source"], value: data },
         this.objectStores.OSDUSchemaStore
       );
       return true;
-    } catch (e: unknown) {
+    } catch {
       return false;
     }
+  }
+
+  public async resolveKindFromRecord(identifier: string): Promise<string> {
+    const kindFromId = await osduAdminDb.getSchemaKeyFromRecord(identifier);
+    if (!kindFromId)
+      throw new Error(
+        "Could not resolve a kind from the record id: " + identifier
+      );
+    return kindFromId;
   }
 }
 
