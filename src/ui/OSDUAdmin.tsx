@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useIdentifiers } from "./hooks/useIdentifiers.ts";
 import { RecordPanel } from "./RecordPanel.tsx";
 import { NewRecordPanel } from "./NewRecordPanel/NewRecordPanel.tsx";
-import { useDbEvents } from "./hooks/useDbEvents.ts";
-await import("../assets/seeder.ts");
+import { useDbSeeder } from "./hooks/useDbSeeder.ts";
 
 function truncateTitle(title: string) {
     const entityName = title.split("--")[1].split(":")[0];
@@ -14,10 +13,9 @@ function truncateTitle(title: string) {
 }
 
 function OSDUAdmin() {
-    useDbEvents("osduadmin");
+    useDbSeeder();
     const identifiers = useIdentifiers();
     const [activeTab, setActiveTab] = useState(0);
-    console.log("rerender");
 
     return (
         <Tabs

@@ -66,10 +66,10 @@ export async function collectValues(osduFields: OSDUField[]) {
         const identifier = field.identifier;
 
         if (commonProps.includes(identifier)) {
-            // @ts-ignore
+            // @ts-expect-error foobar
             field.value = record[identifier];
         } else {
-            // @ts-ignore
+            // @ts-expect-error foobar
             field.value = record.data[identifier];
         }
     });

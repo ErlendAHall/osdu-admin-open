@@ -13,16 +13,17 @@ export class IndexedDbHandler {
     dbHandler: IDBDatabase | undefined;
     IDBIdentifier: string;
     objectStores: typeof ObjectStores;
+    status: "ready" | "initializing" | "error" = "initializing";
 
     constructor() {
         this.IDBIdentifier = "OSDUAdminStore";
         this.objectStores = ObjectStores;
-
-        this.openDB()
-            .then((result) => (this.dbHandler = result))
-            .catch((error) => {
-                throw error;
-            });
+        //
+        // this.openDB()
+        //     .then((result) => (this.dbHandler = result.dbHandler))
+        //     .catch((error) => {
+        //         throw error;
+        //     });
     }
 
     async upsert<T>(data: IDBRecord<T>, destination: ObjectStores) {
@@ -36,7 +37,7 @@ export class IndexedDbHandler {
                 .objectStore(destination)
                 .put(data.value, data.identifier);
 
-            writeRequest.onsuccess = (event) => {
+            writeRequest.onsuccess = () => {
                 resolve(`The record ${data.identifier} was updated.`);
                 globalThis.dispatchEvent(new CustomEvent("upsert"));
             };
@@ -58,7 +59,7 @@ export class IndexedDbHandler {
                 .objectStore(destination)
                 .delete(identifier);
 
-            writeRequest.onsuccess = (event) => {
+            writeRequest.onsuccess = () => {
                 globalThis.dispatchEvent(new CustomEvent("dbdelete"));
                 resolve(`The record ${identifier} was deleted.`);
             };
@@ -132,7 +133,8 @@ export class IndexedDbHandler {
         });
     }
 
-    async openDB(): Promise<IDBDatabase> {
+    /* Handles the process of async opening the databases and returns a this reference to this instance.. */
+    public async openDB(): Promise<this> {
         return new Promise((resolve, reject) => {
             const openRequest = globalThis.indexedDB.open(
                 this.IDBIdentifier,
@@ -140,7 +142,9 @@ export class IndexedDbHandler {
             );
 
             openRequest.onsuccess = () => {
-                resolve(openRequest.result);
+                this.status = "ready";
+                this.dbHandler = openRequest.result;
+                resolve(this);
             };
 
             openRequest.onupgradeneeded = () => {
@@ -150,15 +154,15 @@ export class IndexedDbHandler {
                 openRequest.result.createObjectStore(
                     this.objectStores.OSDURecordStore
                 );
-                resolve(openRequest.result);
+                this.dbHandler = openRequest.result;
+                this.status = "ready";
+                resolve(this);
             };
 
             openRequest.onerror = () => {
+                this.status = "error";
                 reject(openRequest.error);
             };
         });
     }
 }
-
-// @ts-ignore
-window.adminDb = IndexedDbHandler;

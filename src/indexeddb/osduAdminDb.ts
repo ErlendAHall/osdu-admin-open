@@ -8,7 +8,7 @@ export interface IOsduAdminDb {
     readRecord: (identifier: string) => Promise<OSDURecord>;
 }
 
-class OsduAdminDb extends IndexedDbHandler implements OsduAdminDb {
+export class OsduAdminDb extends IndexedDbHandler implements OsduAdminDb {
     public async readRecord(identifier: string): Promise<OSDURecord> {
         return (await this.read<OSDURecord>(
             identifier,
@@ -44,7 +44,6 @@ class OsduAdminDb extends IndexedDbHandler implements OsduAdminDb {
     }
 
     public async writeRecord(record: OSDURecord): Promise<boolean> {
-        debugger;
         try {
             await this.upsert<OSDURecord>(
                 { identifier: record.id, value: record },
@@ -60,9 +59,9 @@ class OsduAdminDb extends IndexedDbHandler implements OsduAdminDb {
     public async writeSchema(data: OSDUSchema): Promise<boolean> {
         try {
             await this.upsert<OSDURecord>(
-                // @ts-ignore
                 {
                     identifier: data.kind ?? data["x-osdu-schema-source"],
+                    // @ts-expect-error: TODO: type this
                     value: data,
                 },
                 this.objectStores.OSDUSchemaStore
@@ -74,7 +73,7 @@ class OsduAdminDb extends IndexedDbHandler implements OsduAdminDb {
     }
 
     public async resolveKindFromRecord(identifier: string): Promise<string> {
-        const kindFromId = await osduAdminDb.getSchemaKeyFromRecord(identifier);
+        const kindFromId = await this.getSchemaKeyFromRecord(identifier);
         if (!kindFromId)
             throw new Error(
                 "Could not resolve a kind from the record id: " + identifier

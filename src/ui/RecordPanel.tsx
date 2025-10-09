@@ -1,8 +1,7 @@
-import { useFormGenerator } from "./hooks/useFormGenerator.tsx";
-import { Button, Paper, Tooltip } from "@equinor/eds-core-react";
-import { useEffect, useState } from "react";
-
-const { osduAdminDb } = await import("../indexeddb/osduAdminDb.ts");
+import {useFormGenerator} from "./hooks/useFormGenerator.tsx";
+import {Button, Paper, Tooltip} from "@equinor/eds-core-react";
+import {useEffect, useState} from "react";
+import {useIndexedDb} from "./hooks/useIndexedDb.ts";
 
 type RecordPanelProps = {
     /* The unique ID of the record. */
@@ -11,12 +10,17 @@ type RecordPanelProps = {
 
 export function RecordPanel({ identifier }: RecordPanelProps) {
     const [kind, setKind] = useState<string | undefined>(undefined);
-
-    useEffect(() => {
-        osduAdminDb.resolveKindFromRecord(identifier).then(setKind);
-    }, [identifier]);
-
+    const { dbInstance } = useIndexedDb();
     const formFields = useFormGenerator(kind, identifier);
+
+    /* This side-effect does a lookup of the schema kind based on a certain record identifier. */
+    useEffect(() => {
+        if (dbInstance) {
+            dbInstance.resolveKindFromRecord(identifier).then(setKind);
+        }
+        
+    }, [identifier, dbInstance]);
+
 
     return (
         <form>

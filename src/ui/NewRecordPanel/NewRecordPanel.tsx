@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import "./styles.css";
 import { fetchSchemaNames } from "../../rest/schema.ts";
 import { getEntityRecord } from "../../rest/record.ts";
-const { osduAdminDb } = await import("../../indexeddb/osduAdminDb.ts");
+import { useIndexedDb } from "../hooks/useIndexedDb.ts";
+import { ObjectStores } from "../../indexeddb/indexedDbHandler.ts";
 
 export function NewRecordPanel() {
     const [options, setOptions] = useState<string[]>([]);
@@ -18,6 +19,7 @@ export function NewRecordPanel() {
     useEffect(() => {
         fetchSchemaNames().then(setOptions);
     }, []);
+    const { writeItem } = useIndexedDb();
 
     // TODO: Provide error handling
 
@@ -57,9 +59,7 @@ export function NewRecordPanel() {
                     onSubmit={async (e) => {
                         e.preventDefault();
                         const record = await getEntityRecord();
-                        console.log("%crecord: ", "color:#f0f;", record);
-                        // @ts-ignore
-                        await osduAdminDb.writeRecord(record);
+                        await writeItem(record, ObjectStores.OSDURecordStore);
                     }}
                 >
                     <Typography variant="accordion_header" group="ui">
