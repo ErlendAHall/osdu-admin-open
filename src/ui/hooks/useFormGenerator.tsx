@@ -6,9 +6,10 @@ import {
     Switch,
     Tooltip,
 } from "@equinor/eds-core-react";
-import { useRecord, useSchema } from "./useIndexedDb.ts";
 import type { OSDUField } from "../../types/form.ts";
 import { collectNodesWithRequiredProps } from "../../traverser.ts";
+import { useRecord } from "./useRecord.ts";
+import { useSchema } from "./useSchema.ts";
 
 /* Accepts a kind and an identifier and creates a list of HTML form fields ready for DOM. */
 export function useFormGenerator(kind?: string, identifier?: string) {
