@@ -1,5 +1,5 @@
 import type { OSDUField } from "./types/form.ts";
-import type {OSDURecord, OSDUSchema} from "./types/osdu.ts";
+import type { OSDURecord, OSDUSchema } from "./types/osdu.ts";
 
 /* Recursively traverses a OSDU schema to find all properties renderable in a HTML form.
    When a node has all required properties, its property name (path) is stored in field.value. */
@@ -42,9 +42,10 @@ export async function collectNodesWithRequiredProps(
 }
 
 /* Accepts a list of OSDUFields and attempts to populate their respective value properties with data. */
-export async function collectValues(osduFields: OSDUField[], record: OSDURecord) {
-    
-
+export async function collectValues(
+    osduFields: OSDUField[],
+    record: OSDURecord
+) {
     const commonProps = [
         "id",
         "kind",
@@ -64,7 +65,7 @@ export async function collectValues(osduFields: OSDUField[], record: OSDURecord)
 
     osduFieldsClone.forEach((field) => {
         const identifier = field.identifier;
-        
+
         if (commonProps.includes(identifier)) {
             // @ts-expect-error foobar
             field.value = record[identifier];

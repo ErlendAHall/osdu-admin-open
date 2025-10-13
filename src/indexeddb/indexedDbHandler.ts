@@ -5,6 +5,7 @@ export type IDBRecord<T> = {
 
 export enum ObjectStores {
     OSDURecordStore = "OSDURecordStore",
+    OSDUUnsavedRecordsStore = "OSDUUnsavedRecordsStore",
     OSDUSchemaStore = "OSDUSchemaStore",
 }
 
@@ -29,17 +30,20 @@ export class IndexedDbHandler {
             console.info("Where:", destination);
             console.info("What:", data);
             console.groupEnd();
-            
+
             globalThis.dispatchEvent(new CustomEvent<IDBRequest>("dbupdating"));
-            
+
             const writeRequest = this.dbHandler
                 .transaction(destination, "readwrite")
                 .objectStore(destination)
                 .put(data.value, data.identifier);
 
-            
             writeRequest.onsuccess = () => {
-                globalThis.dispatchEvent(new CustomEvent<IDBRequest>("dbupdated", {detail: writeRequest}));
+                globalThis.dispatchEvent(
+                    new CustomEvent<IDBRequest>("dbupdated", {
+                        detail: writeRequest,
+                    })
+                );
                 resolve(`The record ${data.identifier} was upserted.`);
             };
 
@@ -54,18 +58,24 @@ export class IndexedDbHandler {
             if (!this.dbHandler) {
                 return reject("DBHandler is not initialised");
             }
-            
-            
 
             const writeRequest = this.dbHandler
                 .transaction(destination, "readwrite")
                 .objectStore(destination)
                 .delete(identifier);
 
-            globalThis.dispatchEvent(new CustomEvent<IDBRequest>("dbupdating", {detail: writeRequest}));
+            globalThis.dispatchEvent(
+                new CustomEvent<IDBRequest>("dbupdating", {
+                    detail: writeRequest,
+                })
+            );
 
             writeRequest.onsuccess = () => {
-                globalThis.dispatchEvent(new CustomEvent<IDBRequest>("dbupdated", {detail: writeRequest}));
+                globalThis.dispatchEvent(
+                    new CustomEvent<IDBRequest>("dbupdated", {
+                        detail: writeRequest,
+                    })
+                );
                 resolve(`The record ${identifier} was deleted.`);
             };
 
@@ -137,28 +147,41 @@ export class IndexedDbHandler {
             };
         });
     }
-    
+
     async deleteAll(destination: ObjectStores) {
         return new Promise((resolve, reject) => {
             if (!this.dbHandler) {
                 return reject("DBHandler is not initialised.");
             }
-            
-            const transaction = this.dbHandler.transaction(destination, "readwrite");
+
+            const transaction = this.dbHandler.transaction(
+                destination,
+                "readwrite"
+            );
             const objectStore = transaction.objectStore(destination);
             const clearRequest = objectStore.clear();
-            
-            globalThis.dispatchEvent(new CustomEvent<IDBRequest>("dbupdating", {detail: clearRequest}));
-            
+
+            globalThis.dispatchEvent(
+                new CustomEvent<IDBRequest>("dbupdating", {
+                    detail: clearRequest,
+                })
+            );
+
             clearRequest.onsuccess = () => {
-                globalThis.dispatchEvent(new CustomEvent<IDBRequest>("dbupdated", {detail: clearRequest}));
+                globalThis.dispatchEvent(
+                    new CustomEvent<IDBRequest>("dbupdated", {
+                        detail: clearRequest,
+                    })
+                );
                 resolve(true);
-            }
-            
+            };
+
             clearRequest.onerror = (error) => {
-                reject(`Could not clear the object store ${destination} ${error}`)
-            }
-        })
+                reject(
+                    `Could not clear the object store ${destination} ${error}`
+                );
+            };
+        });
     }
 
     /* Handles the process of async opening the databases and returns a this reference to this instance.. */

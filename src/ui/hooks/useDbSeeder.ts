@@ -11,7 +11,7 @@ import well1 from "../../assets/mockSchemas/Well:1.0.0.json";
 import well2 from "../../assets/mockSchemas/Well:1.4.0.json";
 
 import { useIndexedDb } from "./useIndexedDb.ts";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 export function useDbSeeder() {
     const { dbInstance } = useIndexedDb();
@@ -41,8 +41,8 @@ export function useDbSeeder() {
         if (dbInstance?.status === "ready" && !seedingDone) {
             handleSeeding().then(() => {
                 setSeedingDone(true);
-                console.info("Seeding is done.")
+                console.info("Seeding is done.");
             });
         }
-    }, [dbInstance]);
+    }, [dbInstance, seedingDone]);
 }

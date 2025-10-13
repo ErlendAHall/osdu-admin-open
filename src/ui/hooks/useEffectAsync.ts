@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 type AsyncEffect = (signal: AbortSignal) => Promise<void | (() => void)> | void;
 export function useEffectAsync(
     effect: AsyncEffect,
-    deps: React.DependencyList = [],
+    deps: React.DependencyList = []
 ): void {
     useEffect(() => {
         const abortController = new AbortController();

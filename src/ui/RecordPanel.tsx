@@ -1,7 +1,7 @@
-import {useFormGenerator} from "./hooks/useFormGenerator.tsx";
-import {Button, Paper, Tooltip} from "@equinor/eds-core-react";
-import {useEffect, useState} from "react";
-import {useIndexedDb} from "./hooks/useIndexedDb.ts";
+import { useFormGenerator } from "./hooks/useFormGenerator.tsx";
+import { Button, Paper, Tooltip } from "@equinor/eds-core-react";
+import { useEffect, useState } from "react";
+import { useIndexedDb } from "./hooks/useIndexedDb.ts";
 
 type RecordPanelProps = {
     /* The unique ID of the record. */
@@ -18,13 +18,13 @@ export function RecordPanel({ identifier }: RecordPanelProps) {
         if (dbInstance) {
             dbInstance.resolveKindFromRecord(identifier).then(setKind);
         }
-        
     }, [identifier, dbInstance]);
-
 
     return (
         <form>
-            <fieldset className="record-fields">{formFields.map((formField) => formField)}</fieldset>
+            <fieldset className="record-fields">
+                {formFields.map((formField) => formField)}
+            </fieldset>
             <fieldset>
                 <Paper elevation="sticky" id="elevated-menu">
                     <Tooltip title="Reset form to last save state.">

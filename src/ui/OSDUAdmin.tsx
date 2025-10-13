@@ -16,7 +16,7 @@ function OSDUAdmin() {
     useDbSeeder();
     const identifiers = useIdentifiers();
     const [activeTab, setActiveTab] = useState(0);
-
+    // namespace:master-data--BHARun:a828c845-101a-5ca0-a729-84fe19cf8841
     return (
         <Tabs
             activeTab={activeTab}

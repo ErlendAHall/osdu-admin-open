@@ -64,8 +64,13 @@ export function useFormGenerator(kind?: string, identifier?: string) {
                         >
                             <Label htmlFor={id} label={field.title} />
                         </Tooltip>
-                        {field?.format === "date-time" && typeof field.value === "string" ? (
-                            <DatePicker id={id} onChange={() => {}} value={new Date(String(field.value))}/>
+                        {field?.format === "date-time" &&
+                        typeof field.value === "string" ? (
+                            <DatePicker
+                                id={id}
+                                onChange={() => {}}
+                                value={new Date(String(field.value))}
+                            />
                         ) : (
                             <Input
                                 id={id}

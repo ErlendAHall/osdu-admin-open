@@ -1,4 +1,4 @@
-import {records} from "../assets/mockRecords";
+import { records } from "../assets/mockRecords";
 
 export async function getEntityRecord<T>(identifier: string): Promise<T> {
     return new Promise((resolve) => {

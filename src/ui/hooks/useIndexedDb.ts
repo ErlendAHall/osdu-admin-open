@@ -7,24 +7,24 @@ interface IIndexedDb<T> {
     data: T[] | undefined;
     error: Error | undefined;
     loading: boolean;
-    
-    /* A reference to the running database instance. 
-    * Consumers should check if the instance is not undefined, but otherwise they can assume it is read and write ready. 
-    */
+
+    /* A reference to the running database instance.
+     * Consumers should check if the instance is not undefined, but otherwise they can assume it is read and write ready.
+     */
     dbInstance?: OsduAdminDb;
-    
+
     /* Retrieves a single item of type T from the provided object store identifier. */
     getItem: (
         identifier: string,
         objectStore: ObjectStores
     ) => Promise<T | undefined>;
-    
+
     /* Retrieves all items of type T. */
-    getItems: (objectStore: ObjectStores) => Promise<T[] | undefined>
-    
+    getItems: (objectStore: ObjectStores) => Promise<T[] | undefined>;
+
     /* Writes a single record of type T to the provided object store identifier. */
     writeItem: (item: T, objectStore: ObjectStores) => Promise<boolean>;
-    
+
     /* Removes a single record of type T to the provided object store identifier*/
     deleteItem: (
         identifier: string,
@@ -53,18 +53,18 @@ export function useIndexedDb<T>(): IIndexedDb<T> {
             setIsLoading(false);
         });
     }, []);
-    
+
     useEffect(() => {
         globalThis.addEventListener("dbupdating", () => {
-            setIsLoading(true)
-        })
-    }, [])
-    
+            setIsLoading(true);
+        });
+    }, []);
+
     useEffect(() => {
         globalThis.addEventListener("dbupdated", () => {
             setIsLoading(false);
-        })
-    }, [])
+        });
+    }, []);
 
     return {
         data,
@@ -73,8 +73,10 @@ export function useIndexedDb<T>(): IIndexedDb<T> {
         dbInstance: dbInstance.current,
         getItem: async (identifier: string, objectStore: ObjectStores) => {
             if (!dbInstance) {
-                throw new TypeError("Could not resolve the database. " +
-                    "It might be in process of being instantiated.")
+                throw new TypeError(
+                    "Could not resolve the database. " +
+                        "It might be in process of being instantiated."
+                );
             }
 
             setIsLoading(true);
@@ -106,13 +108,15 @@ export function useIndexedDb<T>(): IIndexedDb<T> {
         },
         getItems: async (objectStore: ObjectStores) => {
             if (!dbInstance.current) {
-                throw new TypeError("Could not resolve the database. " +
-                    "It might be in process of being instantiated.")
+                throw new TypeError(
+                    "Could not resolve the database. " +
+                        "It might be in process of being instantiated."
+                );
             }
             setIsLoading(true);
             let tempData;
             if (objectStore === ObjectStores.OSDURecordStore) {
-                tempData = await dbInstance.current.readAllRecords() as T[];
+                tempData = (await dbInstance.current.readAllRecords()) as T[];
                 setData(tempData);
             }
             setIsLoading(false);
@@ -120,8 +124,10 @@ export function useIndexedDb<T>(): IIndexedDb<T> {
         },
         writeItem: async (item: T, objectStore: ObjectStores) => {
             if (!dbInstance) {
-                throw new TypeError("Could not resolve the database. " +
-                    "It might be in process of being instantiated.")
+                throw new TypeError(
+                    "Could not resolve the database. " +
+                        "It might be in process of being instantiated."
+                );
             }
 
             setIsLoading(true);
@@ -144,7 +150,9 @@ export function useIndexedDb<T>(): IIndexedDb<T> {
         },
         deleteItem: function (identifier: string): Promise<boolean> {
             if (!dbInstance) {
-                throw new TypeError("Could not resolve the database. It might be in process of being instaniated.")
+                throw new TypeError(
+                    "Could not resolve the database. It might be in process of being instaniated."
+                );
             }
             throw new Error("Function not implemented." + identifier);
         },
