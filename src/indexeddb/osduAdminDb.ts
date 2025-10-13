@@ -1,7 +1,7 @@
 import { IndexedDbHandler, ObjectStores } from "./indexedDbHandler.ts";
 import type {
     OSDURecord,
-    OSDUSchema,
+    OSDUSchema, UnsavedOSDURecord,
     // UnsavedOSDURecord,
 } from "../types/osdu.ts";
 
@@ -73,6 +73,22 @@ export class OsduAdminDb extends IndexedDbHandler implements IOsduAdminDb {
                     value: data,
                 },
                 this.objectStores.OSDUSchemaStore
+            );
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
+    public async writeUnsavedSchema(data: OSDUSchema): Promise<boolean> {
+        try {
+            await this.upsert<UnsavedOSDURecord>(
+                {
+                    identifier: data.kind ?? data["x-osdu-schema-source"],
+                    // @ts-expect-error: TODO: type this
+                    value: data,
+                },
+                this.objectStores.OSDUUnsavedRecordsStore
             );
             return true;
         } catch {

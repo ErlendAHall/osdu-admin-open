@@ -46,7 +46,7 @@ export function useFormGenerator(kind?: string, identifier?: string) {
                         <Input
                             onChange={() => {}}
                             type="number"
-                            id={id}
+                            id={field.identifier}
                             value={field.value}
                         />
                     </div>
@@ -67,13 +67,13 @@ export function useFormGenerator(kind?: string, identifier?: string) {
                         {field?.format === "date-time" &&
                         typeof field.value === "string" ? (
                             <DatePicker
-                                id={id}
+                                id={field.identifier}
                                 onChange={() => {}}
                                 value={new Date(String(field.value))}
                             />
                         ) : (
                             <Input
-                                id={id}
+                                id={field.identifier}
                                 autoComplete="off"
                                 value={field.value}
                                 onChange={() => {}}
@@ -96,7 +96,7 @@ export function useFormGenerator(kind?: string, identifier?: string) {
                             title={field.description}
                         >
                             <Switch
-                                id={id}
+                                id={field.identifier}
                                 label={field.title}
                                 checked={field.value}
                                 onChange={() => {}}
@@ -117,7 +117,7 @@ export function useFormGenerator(kind?: string, identifier?: string) {
                         </Tooltip>
                         <Input
                             onChange={() => {}}
-                            id={id}
+                            id={field.identifier}
                             value={field.value}
                         />
                     </div>

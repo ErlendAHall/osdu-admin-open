@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { OSDURecord, OSDUSchema } from "../../types/osdu.ts";
+import type {OSDURecord, OSDUSchema} from "../../types/osdu.ts";
 import { ObjectStores } from "../../indexeddb/indexedDbHandler.ts";
 import { OsduAdminDb } from "../../indexeddb/osduAdminDb.ts";
+
 
 interface IIndexedDb<T> {
     data: T[] | undefined;
@@ -31,6 +32,8 @@ interface IIndexedDb<T> {
         objectStore: ObjectStores
     ) => Promise<boolean>;
 }
+
+
 
 export function useIndexedDb<T>(): IIndexedDb<T> {
     const [data, setData] = useState<T[]>([]);
@@ -139,6 +142,11 @@ export function useIndexedDb<T>(): IIndexedDb<T> {
                         item as OSDURecord
                     )) ?? false;
             } else if (objectStore === ObjectStores.OSDUSchemaStore) {
+                writeStatus =
+                    (await dbInstance.current?.writeSchema(
+                        item as OSDUSchema
+                    )) ?? false;
+            } else if (objectStore === ObjectStores.OSDUUnsavedRecordsStore) {
                 writeStatus =
                     (await dbInstance.current?.writeSchema(
                         item as OSDUSchema
