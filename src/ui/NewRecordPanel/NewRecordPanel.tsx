@@ -28,7 +28,7 @@ export function NewRecordPanel() {
             <section className="create_record">
                 <form>
                     <Typography variant="accordion_header" group="ui">
-                        Create a new record
+                        Create a new record (this does not work yet)
                     </Typography>
                     <Autocomplete
                         label=""
