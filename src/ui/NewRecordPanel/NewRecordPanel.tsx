@@ -1,59 +1,34 @@
 import {
-    Autocomplete,
     Button,
-    Checkbox,
     Search,
     Tabs,
-    Typography,
+    Progress
 } from "@equinor/eds-core-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./styles.css";
-import { fetchSchemaNames } from "../../rest/schema.ts";
 import { useIndexedDb } from "../hooks/useIndexedDb.ts";
 import { ObjectStores } from "../../indexeddb/indexedDbHandler.ts";
 import { getEntityRecord } from "../../rest/record.ts";
 
 export function NewRecordPanel() {
-    const [options, setOptions] = useState<string[]>([]);
-    const [autogenIdEnabled, setAutogenIdEnabled] = useState(true);
-    useEffect(() => {
-        fetchSchemaNames().then(setOptions);
-    }, []);
+
     const { writeItem } = useIndexedDb();
+    const [isLoading, setIsLoading] = useState(false);
+    
+    function simulateLoading(): Promise<undefined> {
+        setIsLoading(true)
+        return new Promise(resolve => {
+            setTimeout(() => {
+                setIsLoading(false)
+                resolve(undefined)
+            }, 2000)
+        })
+    }
 
     // TODO: Provide error handling
 
     return (
         <Tabs.Panel>
-            <section className="create_record">
-                <form>
-                    <Typography variant="accordion_header" group="ui">
-                        Create a new record (this does not work yet)
-                    </Typography>
-                    <Autocomplete
-                        label=""
-                        placeholder="kind"
-                        id="new-record"
-                        options={options}
-                    />
-                    {!autogenIdEnabled && (
-                        <em>TODO: Provide textfield to manually set a id.</em>
-                    )}
-                    <fieldset className="record-create-fieldset">
-                        <Checkbox
-                            checked={autogenIdEnabled}
-                            label="Autogenerate record identifier"
-                            onChange={() =>
-                                setAutogenIdEnabled(!autogenIdEnabled)
-                            }
-                        />
-                        <Button onClick={() => console.log("create record")}>
-                            Create
-                        </Button>
-                    </fieldset>
-                </form>
-            </section>
-
             <section className="edit_record">
                 <form
                     onSubmit={async (e) => {
@@ -74,19 +49,28 @@ export function NewRecordPanel() {
                         }
                     }}
                 >
-                    <Typography variant="accordion_header" group="ui">
-                        Open an existing record
-                    </Typography>
+                    <h3>
+                        Open an existing record:
+                    </h3>
                     <Search
                         id={"identifier-search"}
                         placeholder={"identifier"}
                         aria-label="Search by identifier"
                     ></Search>
-                    <Button type={"submit"}>Open</Button>
+                    <Button onClick={() => simulateLoading()} type={"submit"}>Open</Button>
+                    {isLoading && <Progress.Circular  />}
                 </form>
             </section>
-            <section>
-                <p>Identifiers to test with</p>
+            <section style={{margin: "1rem"}}>
+                <h3>Note:</h3>
+                <article>
+                    <p>In this view you can open an existing record by copy-pasting one of the record identifiers below
+                    into the textfield above.</p>
+                    <p>Other identifiers will not work since this POC is not hooked up to any data providers.</p>
+                </article>
+            </section>
+             <section style={{margin: "1rem"}}>
+                <h4>Records to test with:</h4>
                 <ul>
                     <li>
                         namespace:master-data--Well:c0ffeeb0-1dea-5e1a-8b0b-deadbeef1234
