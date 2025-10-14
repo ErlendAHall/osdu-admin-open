@@ -93,16 +93,16 @@ export function RecordPanel({ identifier }: RecordPanelProps) {
                 </fieldset>
                 <fieldset>
                     <Paper elevation="sticky" id="elevated-menu">
-                        <Tooltip title="Reset form to last save state.">
-                            <Button color="danger" id="reset-button">
-                                Reset
-                            </Button>
-                        </Tooltip>
-                        <Tooltip title="Undo last change">
-                            <Button color="secondary" id="undo-button">
-                                Undo
-                            </Button>
-                        </Tooltip>
+                        {/*<Tooltip title="Reset form to last save state.">*/}
+                        {/*    <Button color="danger" id="reset-button">*/}
+                        {/*        Reset*/}
+                        {/*    </Button>*/}
+                        {/*</Tooltip>*/}
+                        {/*<Tooltip title="Undo last change">*/}
+                        {/*    <Button color="secondary" id="undo-button">*/}
+                        {/*        Undo*/}
+                        {/*    </Button>*/}
+                        {/*</Tooltip>*/}
                         <Tooltip title="Save changes to OSDU">
                             <Button
                                 color="primary"
