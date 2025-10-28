@@ -38,6 +38,12 @@ export class OsduAdminDb extends IndexedDbHandler implements IOsduAdminDb {
         );
     }
 
+    public async readAllSchemas(): Promise<Array<OSDUSchema>> {
+        return await this.readAll<OSDUSchema>(
+            this.objectStores.OSDUSchemaStore
+        );
+    }
+
     public async getSchemaKeyFromRecord(
         identifier: string
     ): Promise<string | undefined> {
@@ -114,5 +120,8 @@ export class OsduAdminDb extends IndexedDbHandler implements IOsduAdminDb {
 }
 
 const osduAdminDb = new OsduAdminDb();
+
+// @ts-expect-error test code
+globalThis.osduAdminDb = osduAdminDb;
 
 export { osduAdminDb };

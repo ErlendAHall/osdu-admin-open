@@ -13,8 +13,8 @@ import { useSchema } from "./useSchema.ts";
 
 /* Accepts a kind and an identifier and creates a list of HTML form fields ready for DOM. */
 export function useFormGenerator(kind?: string, identifier?: string) {
-    const record = useRecord(identifier);
-    const schema = useSchema(kind);
+    const { record } = useRecord(identifier);
+    const { schema } = useSchema(kind);
     const [osduFields, setOsduFields] = useState<OSDUField[]>([]);
     const [htmlNodes, setHtmlNodes] = useState<ReactNode[]>([]);
 

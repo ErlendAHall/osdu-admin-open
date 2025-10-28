@@ -1,9 +1,4 @@
-import {
-    Button,
-    Search,
-    Tabs,
-    Progress
-} from "@equinor/eds-core-react";
+import { Button, Search, Tabs, Progress } from "@equinor/eds-core-react";
 import { useState } from "react";
 import "./styles.css";
 import { useIndexedDb } from "../hooks/useIndexedDb.ts";
@@ -11,18 +6,17 @@ import { ObjectStores } from "../../indexeddb/indexedDbHandler.ts";
 import { getEntityRecord } from "../../rest/record.ts";
 
 export function NewRecordPanel() {
-
     const { writeItem } = useIndexedDb();
     const [isLoading, setIsLoading] = useState(false);
-    
+
     function simulateLoading(): Promise<undefined> {
-        setIsLoading(true)
-        return new Promise(resolve => {
+        setIsLoading(true);
+        return new Promise((resolve) => {
             setTimeout(() => {
-                setIsLoading(false)
-                resolve(undefined)
-            }, 2000)
-        })
+                setIsLoading(false);
+                resolve(undefined);
+            }, 2000);
+        });
     }
 
     // TODO: Provide error handling
@@ -49,27 +43,33 @@ export function NewRecordPanel() {
                         }
                     }}
                 >
-                    <h3>
-                        Open an existing record:
-                    </h3>
+                    <h3>Open an existing record:</h3>
                     <Search
                         id={"identifier-search"}
                         placeholder={"identifier"}
                         aria-label="Search by identifier"
                     ></Search>
-                    <Button onClick={() => simulateLoading()} type={"submit"}>Open</Button>
-                    {isLoading && <Progress.Circular  />}
+                    <Button onClick={() => simulateLoading()} type={"submit"}>
+                        Open
+                    </Button>
+                    {isLoading && <Progress.Circular />}
                 </form>
             </section>
-            <section style={{margin: "1rem"}}>
+            <section style={{ margin: "1rem" }}>
                 <h3>Note:</h3>
                 <article>
-                    <p>In this view you can open an existing record by copy-pasting one of the record identifiers below
-                    into the textfield above.</p>
-                    <p>Other identifiers will not work since this POC is not hooked up to any data providers.</p>
+                    <p>
+                        In this view you can open an existing record by
+                        copy-pasting one of the record identifiers below into
+                        the textfield above.
+                    </p>
+                    <p>
+                        Other identifiers will not work since this POC is not
+                        hooked up to any data providers.
+                    </p>
                 </article>
             </section>
-             <section style={{margin: "1rem"}}>
+            <section style={{ margin: "1rem" }}>
                 <h4>Records to test with:</h4>
                 <ul>
                     <li>

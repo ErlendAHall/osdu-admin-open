@@ -45,4 +45,6 @@ export function useDbSeeder() {
             });
         }
     }, [dbInstance, seedingDone]);
+
+    return seedingDone;
 }

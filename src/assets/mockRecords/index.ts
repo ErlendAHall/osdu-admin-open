@@ -1,12 +1,18 @@
 export const records = {
     "a828c845-101a-5ca0-a729-84fe19cf8841": (
-        await import("./BHARun--2.0.0--a828c845-101a-5ca0-a729-84fe19cf8841.json")
+        await import(
+            "./BHARun--2.0.0--a828c845-101a-5ca0-a729-84fe19cf8841.json"
+        )
     ).default,
     "1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed": (
-        await import("./BHARun--2.0.0--1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed.json")
+        await import(
+            "./BHARun--2.0.0--1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed.json"
+        )
     ).default,
     "6ba7b810-9dad-11d1-80b4-00c04fd430c8": (
-        await import("./BHARun--2.0.0--6ba7b810-9dad-11d1-80b4-00c04fd430c8.json")
+        await import(
+            "./BHARun--2.0.0--6ba7b810-9dad-11d1-80b4-00c04fd430c8.json"
+        )
     ).default,
     "7f24cc1c-5a82-4c7a-98a4-2d1e1c84b3a2": (
         await import(

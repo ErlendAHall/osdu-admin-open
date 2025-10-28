@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { OSDURecord, OSDUSchema } from "../../types/osdu.ts";
 import { ObjectStores } from "../../indexeddb/indexedDbHandler.ts";
 import { OsduAdminDb } from "../../indexeddb/osduAdminDb.ts";
@@ -106,22 +106,31 @@ export function useIndexedDb<T>(): IIndexedDb<T> {
 
             return tempData;
         },
-        getItems: async (objectStore: ObjectStores) => {
+        getItems: useCallback(async (objectStore: ObjectStores) => {
             if (!dbInstance.current) {
                 throw new TypeError(
-                    "Could not resolve the database. " +
-                        "It might be in process of being instantiated."
+                    "Could not resolve the database. It might be in process of being instantiated."
                 );
             }
             setIsLoading(true);
-            let tempData;
-            if (objectStore === ObjectStores.OSDURecordStore) {
-                tempData = (await dbInstance.current.readAllRecords()) as T[];
-                setData(tempData);
+            let tempData: T[] | undefined;
+            switch (objectStore) {
+                case ObjectStores.OSDURecordStore:
+                    tempData =
+                        (await dbInstance.current.readAllRecords()) as T[];
+                    break;
+                case ObjectStores.OSDUSchemaStore:
+                    tempData =
+                        (await dbInstance.current.readAllSchemas()) as T[];
+                    break;
+                default:
+                    break;
             }
+
+            setData(tempData ?? []);
             setIsLoading(false);
             return tempData;
-        },
+        }, []),
         writeItem: async (item: T, objectStore: ObjectStores) => {
             if (!dbInstance) {
                 throw new TypeError(

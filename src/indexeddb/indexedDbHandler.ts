@@ -210,7 +210,7 @@ export class IndexedDbHandler {
                     openRequest.result.createObjectStore(
                         this.objectStores.OSDUUnsavedRecordsStore
                     );
-                } catch(error: unknown) {
+                } catch (error: unknown) {
                     console.error("Error thrown during seeding: ", error);
                 }
 
