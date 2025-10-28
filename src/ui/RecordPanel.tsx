@@ -71,8 +71,11 @@ export function RecordPanel({ identifier }: RecordPanelProps) {
             >
                 <DialogContent>
                     <article>
-                        <p>This dialog shows all data that has been collected from the form below and is what will be posted
-                        to /records</p>
+                        <p>
+                            This dialog shows all data that has been collected
+                            from the form below and is what will be posted to
+                            /records
+                        </p>
                         <ul>{createList()}</ul>
                     </article>
                 </DialogContent>
@@ -82,11 +85,21 @@ export function RecordPanel({ identifier }: RecordPanelProps) {
             </Dialog>
             <form onSubmit={handleFormSubmit}>
                 <article>
-                    
-                <p>This HTML form was generated from a schema file which is loaded into IndexedDB.</p>
-                <p>The schemas can be inspected from the devtools in most browsers. In Chromium, it is located in
-                    Application tab -{">"} IndexedDB in sidebar -{">"} OSDUAdminDatabase -{">"} OSDUSchemaStore</p>
-                <p>There are no external data sources present at this time and all the records and schemas are seeded from sideloaded assets.</p>
+                    <p>
+                        This HTML form was generated from a schema file which is
+                        loaded into IndexedDB.
+                    </p>
+                    <p>
+                        The schemas can be inspected from the devtools in most
+                        browsers. In Chromium, it is located in Application tab
+                        -{">"} IndexedDB in sidebar -{">"} OSDUAdminDatabase -
+                        {">"} OSDUSchemaStore
+                    </p>
+                    <p>
+                        There are no external data sources present at this time
+                        and all the records and schemas are seeded from
+                        sideloaded assets.
+                    </p>
                 </article>
                 <fieldset className="record-fields">
                     {formFields.map((formField) => formField)}
