@@ -16,6 +16,12 @@ export type OSDUSchema = {
 
 export type OSDURecord = {
     id: string;
+    kind: string;
+    data: RecordData;
 };
+
+export type RecordData = {
+    [key: string]: string | number | RecordData;
+}
 
 export type UnsavedOSDURecord = Partial<OSDURecord>;

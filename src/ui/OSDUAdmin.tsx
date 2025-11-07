@@ -1,5 +1,5 @@
 import "./App.css";
-import { Tabs } from "@equinor/eds-core-react";
+import {Tabs} from "@equinor/eds-core-react";
 import { useState} from "react";
 import { useIdentifiers } from "./hooks/useIdentifiers.ts";
 import { RecordPanel } from "./RecordPanel.tsx";
@@ -8,13 +8,44 @@ import { useDbSeeder } from "./hooks/useDbSeeder.ts";
 import { useRecord } from "./hooks/useRecord.ts";
 import { useSchema } from "./hooks/useSchema.ts";
 import { useRecords } from "./hooks/useRecords.ts";
-import { useSchemas } from "./hooks/useSchemas.ts";
+import {useSchemaKinds, useSchemas} from "./hooks/useSchemas.ts";
+import {RecordTable} from "./table/RecordTable.tsx";
 
 function truncateTitle(title: string) {
     const entityName = title.split("--")[1].split(":")[0];
     const truncatedVersion = title.split(":")?.at(-1)?.split("-")?.at(-1);
     return entityName + ":" + truncatedVersion;
 }
+
+export function OSDUAdminWithTable() {
+    useDbSeeder();
+    // const identifiers = useIdentifiers();
+    // const schemas = useSchemas();
+    const kinds = useSchemaKinds()
+    const [activeTab, setActiveTab] = useState(0);
+    
+    return (
+        <Tabs
+            activeTab={activeTab}
+            onChange={(index) => setActiveTab(Number(index))}
+        >
+            <Tabs.List>
+                {kinds.map((tabTitle, index) => (
+                    <Tabs.Tab key={index}>{String(tabTitle)}</Tabs.Tab>
+                ))}
+            </Tabs.List>
+            <Tabs.Panels>
+                {kinds.map((kind, index) => (
+                    <Tabs.Panel key={"panel" + index}>
+                        <RecordTable key={index} kind={kind} />
+                    </Tabs.Panel>
+                ))}
+            </Tabs.Panels>
+        </Tabs>
+    )
+
+}
+
 
 
 // @ts-expect-error Just a testing component

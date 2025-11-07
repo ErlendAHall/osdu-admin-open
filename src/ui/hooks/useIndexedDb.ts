@@ -7,7 +7,6 @@ interface IIndexedDb<T> {
     data: T[] | undefined;
     error: Error | undefined;
     loading: boolean;
-
     /* A reference to the running database instance.
      * Consumers should check if the instance is not undefined, but otherwise they can assume it is read and write ready.
      */
