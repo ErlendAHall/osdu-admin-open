@@ -3,7 +3,7 @@ import {MsalProvider, useMsalAuthentication} from "@azure/msal-react";
 import { InteractionType, InteractionRequiredAuthError} from "@azure/msal-browser";
 import {JSONTree} from "react-json-tree";
 import {createRoot} from "react-dom/client";
-import {OSDUAdmin} from "./ui/OSDUAdmin.tsx";
+import {OSDUAdminWithTable} from "./ui/OSDUAdmin.tsx";
 import {authenticator} from "./utils/authenticator.ts";
 
 type AuthProviderProps = {
@@ -44,7 +44,7 @@ try {
             <StrictMode>
                 <MsalProvider instance={authenticator.msalInstance}>
                     <AuthProvider>
-                        <OSDUAdmin />
+                        <OSDUAdminWithTable />
                     </AuthProvider>
                 </MsalProvider>
             </StrictMode>
