@@ -1,11 +1,11 @@
-import { Button, Search, Tabs, Progress } from "@equinor/eds-core-react";
+import { Button, Search, Progress } from "@equinor/eds-core-react";
 import { useState } from "react";
-import "./styles.css";
 import { useIndexedDb } from "../hooks/useIndexedDb.ts";
 import { getEntityRecord } from "../../rest/record.ts";
 import { ObjectStores } from "../../types/db.ts";
+import "./styles.css";
 
-export function NewRecordPanel() {
+export function NewRecordPage() {
     const { writeItem } = useIndexedDb();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -22,7 +22,7 @@ export function NewRecordPanel() {
     // TODO: Provide error handling
 
     return (
-        <Tabs.Panel>
+        <>
             <section className="edit_record">
                 <form
                     onSubmit={async (e) => {
@@ -58,15 +58,7 @@ export function NewRecordPanel() {
             <section style={{ margin: "1rem" }}>
                 <h3>Note:</h3>
                 <article>
-                    <p>
-                        In this view you can open an existing record by
-                        copy-pasting one of the record identifiers below into
-                        the textfield above.
-                    </p>
-                    <p>
-                        Other identifiers will not work since this POC is not
-                        hooked up to any data providers.
-                    </p>
+                    <p>TODO: This view should be an empty</p>
                 </article>
             </section>
             <section style={{ margin: "1rem" }}>
@@ -98,6 +90,6 @@ export function NewRecordPanel() {
                     </li>
                 </ul>
             </section>
-        </Tabs.Panel>
+        </>
     );
 }
