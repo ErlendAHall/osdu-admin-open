@@ -8,9 +8,11 @@ import { useDbSeeder } from "./hooks/useDbSeeder.ts";
 import { useRecord } from "./hooks/useRecord.ts";
 import { useSchema } from "./hooks/useSchema.ts";
 import { useRecords } from "./hooks/useRecords.ts";
-import { useSchemaKinds, useSchemas } from "./hooks/useSchemas.ts";
-import { RecordTable } from "./table/RecordTable.tsx";
+import { useSchemas } from "./hooks/useSchemas.ts";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { RecordsPage } from "./pages/RecordsPage.tsx";
 import { TopBar } from "./TopBar/TopBar.tsx";
+import { NewRecordPage } from "./pages/NewRecordPage.tsx";
 
 function truncateTitle(title: string) {
     const entityName = title.split("--")[1].split(":")[0];
@@ -20,31 +22,33 @@ function truncateTitle(title: string) {
 
 export function OSDUAdminWithTable() {
     useDbSeeder();
-    // const identifiers = useIdentifiers();
-    // const schemas = useSchemas();
-    const kinds = useSchemaKinds();
-    const [activeTab, setActiveTab] = useState(0);
 
     return (
         <main>
             <TopBar />
-            <Tabs
-                activeTab={activeTab}
-                onChange={(index) => setActiveTab(Number(index))}
-            >
-                <Tabs.List>
-                    {kinds.map((tabTitle, index) => (
-                        <Tabs.Tab key={index}>{String(tabTitle)}</Tabs.Tab>
-                    ))}
-                </Tabs.List>
-                <Tabs.Panels>
-                    {kinds.map((kind, index) => (
-                        <Tabs.Panel key={"panel" + index}>
-                            <RecordTable key={index} kind={kind} />
-                        </Tabs.Panel>
-                    ))}
-                </Tabs.Panels>
-            </Tabs>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<RecordsPage />} />
+                    <Route path="/records" element={<RecordsPage />} />
+                    <Route path="new-record" element={<NewRecordPage />} />
+                    <Route
+                        path="/record"
+                        element={
+                            <>
+                                <p>this be edit record</p>
+                            </>
+                        }
+                    />
+                    <Route
+                        path="/settings"
+                        element={
+                            <>
+                                <p>this be settings</p>
+                            </>
+                        }
+                    />
+                </Routes>
+            </BrowserRouter>
         </main>
     );
 }
