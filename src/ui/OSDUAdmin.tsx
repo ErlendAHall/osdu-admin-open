@@ -10,6 +10,7 @@ import { useSchema } from "./hooks/useSchema.ts";
 import { useRecords } from "./hooks/useRecords.ts";
 import { useSchemaKinds, useSchemas } from "./hooks/useSchemas.ts";
 import { RecordTable } from "./table/RecordTable.tsx";
+import { TopBar } from "./TopBar/TopBar.tsx";
 
 function truncateTitle(title: string) {
     const entityName = title.split("--")[1].split(":")[0];
@@ -25,23 +26,26 @@ export function OSDUAdminWithTable() {
     const [activeTab, setActiveTab] = useState(0);
 
     return (
-        <Tabs
-            activeTab={activeTab}
-            onChange={(index) => setActiveTab(Number(index))}
-        >
-            <Tabs.List>
-                {kinds.map((tabTitle, index) => (
-                    <Tabs.Tab key={index}>{String(tabTitle)}</Tabs.Tab>
-                ))}
-            </Tabs.List>
-            <Tabs.Panels>
-                {kinds.map((kind, index) => (
-                    <Tabs.Panel key={"panel" + index}>
-                        <RecordTable key={index} kind={kind} />
-                    </Tabs.Panel>
-                ))}
-            </Tabs.Panels>
-        </Tabs>
+        <main>
+            <TopBar />
+            <Tabs
+                activeTab={activeTab}
+                onChange={(index) => setActiveTab(Number(index))}
+            >
+                <Tabs.List>
+                    {kinds.map((tabTitle, index) => (
+                        <Tabs.Tab key={index}>{String(tabTitle)}</Tabs.Tab>
+                    ))}
+                </Tabs.List>
+                <Tabs.Panels>
+                    {kinds.map((kind, index) => (
+                        <Tabs.Panel key={"panel" + index}>
+                            <RecordTable key={index} kind={kind} />
+                        </Tabs.Panel>
+                    ))}
+                </Tabs.Panels>
+            </Tabs>
+        </main>
     );
 }
 
