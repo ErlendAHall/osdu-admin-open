@@ -1,0 +1,59 @@
+.records-form {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 0.5rem;
+    height: 100%;
+    margin: 1rem;
+
+    & #elevated-menu {
+        /*background: white;*/
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        position: fixed;
+        bottom: 50px;
+        right: 50px;
+        padding: 1rem;
+    }
+
+    & .inputs {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 0.5rem;
+    }
+
+    .record-fields {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 1rem;
+    }
+}
+
+.new-records-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 80%;
+    border: 1px dotted black;
+    overflow: auto;
+    margin: 1rem;
+
+    & h3 {
+        margin-left: 1rem;
+    }
+
+    & fieldset {
+        display: flex;
+        gap: 0.5rem;
+        /* border: 1px solid black; */
+        width: max-content;
+        /* align-self: flex-end; */
+    }
+}
+
+.kind-picker {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-left: 1rem;
+}
