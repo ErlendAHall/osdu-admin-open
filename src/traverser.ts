@@ -42,7 +42,6 @@ export async function collectNodesWithRequiredProps(
             traverse(value, path ? `${path}.${childKey}` : childKey);
         }
     }
-
     // Algo starts here.
     traverse(root, "root");
 
@@ -51,7 +50,8 @@ export async function collectNodesWithRequiredProps(
         found = await collectValues(found, record);
     }
 
-    return found;
+    //TODO: Prevent the algo from creating an element for the topmost root.
+    return found.slice(1);
 }
 
 /* Accepts a list of OSDUFields and attempts to populate their respective value properties with data. */
