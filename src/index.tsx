@@ -15,7 +15,6 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [loggedIn, setLoggedIn] = useState(false);
-    console.log("%cloggedIn: ", "color:#f0f;", loggedIn);
     const { login, result, error } = useMsalAuthentication(
         InteractionType.Redirect,
         {
